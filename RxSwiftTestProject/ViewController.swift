@@ -28,6 +28,7 @@ class ViewController: UIViewController {
         viewModel = ViewModel()
         viewModel.controller = self
         configure()
+        viewModel.configure()
         let tap = UITapGestureRecognizer(target: self, action: #selector(handleTap))
         view.addGestureRecognizer(tap)
     }
@@ -51,15 +52,21 @@ class ViewController: UIViewController {
             .disposed(by: bag)
         
         viewModel.validPasswordSignal
-            .skip(2)
+            .skip(1)
             .asDriver(onErrorJustReturn: false)
             .drive(onNext: { [unowned errorLabel] valid in
                 if !valid {
-                    errorLabel?.text = "error"
-                    print("error")
+                    UIView.animate(withDuration: 1) {
+                        errorLabel?.text = "error"
+                        errorLabel?.textColor = .red
+                        errorLabel?.alpha = 0.7
+                    }
                 } else {
-                    errorLabel?.text = "good"
-                    print("good")
+                    UIView.animate(withDuration: 1) {
+                        errorLabel?.text = "good"
+                        errorLabel?.textColor = .green
+                        errorLabel?.alpha = 0.3
+                    }
                 }
             }).disposed(by: bag)
     }

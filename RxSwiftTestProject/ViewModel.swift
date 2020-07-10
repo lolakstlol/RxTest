@@ -21,20 +21,9 @@ class ViewModel {
     weak var controller: ViewController!
     
     func configure() {
-        validFormSignal = Observable.combineLatest(validSwitchSignal, validFormPasswordSignal) {
-            $0 && $1
-        }
-        
         password.subscribe(
             onNext: { [unowned self] in
                 self.validPasswordSignal.onNext(self.validate(password: $0 ?? ""))
-            }
-        )
-            .disposed(by: bag)
-        
-        isValue.subscribe(
-            onNext: { [unowned self] in
-                self.validSwitchSignal.onNext($0 ?? false)
             }
         )
             .disposed(by: bag)
